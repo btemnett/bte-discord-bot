@@ -6,20 +6,21 @@ let pings = []
 
 export const enum Command {
     PING = "ping",
-    ROLL = "roll"
+    ROLL = "roll",
+    DB = "db"
 }
 
-export const handlePing = (msg, commandObject) => {
+export const handlePing = (msg) => {
 
     const user = client.users.cache.get(`${msg.author.id}`);
     console.log(`author: ${user}`)
 
     const timeTaken = compareTimeStamps(Date.now(), msg.createdTimestamp);
-    console.log({timeTaken})
+    console.log({ timeTaken })
     console.log(`time taken type ${typeof timeTaken}`)
 
     const foundPingEventIndex = pings.findIndex(p => p.pinger === user);
-    
+
     console.log(`foundpingeventindex : ${foundPingEventIndex}`)
     if (foundPingEventIndex >= 0) {
 
@@ -47,74 +48,73 @@ export const handlePing = (msg, commandObject) => {
 
 export const handleRoll = (msg, commandObject) => {
 
-    // "!roll D# X#"
-    // if (commandObject.options.length > 2 || commandObject.options.length === 0){
-    //     msg.reply(`The command structure is !roll D# X#. There are either too little or too many arguments.`);
-    //     return;
-    // }
-    // if (isNaN(parseInt(commandObject.options[0].slice(1)))){
-    //     msg.reply(`The command structure is !roll D# X#. ${commandObject.options[0].slice(1)} is not a number`);
-    //     return;
-    // }
-    // if (isNaN(parseInt(commandObject.options[1].slice(1)))){
-    //     msg.reply(`The command structure is !roll D# X#. ${commandObject.options[1].slice(1)} is not a number`);
-    //     return;
-    // }
-    // if (commandObject.options[0][0].toLowerCase() !== 'd'){
-    //     msg.reply(`The command structure is !roll D# X#. ${commandObject.options[0][0]} is not accepted for sides flag`);
-    //     return;
-    // }
-    // if (commandObject.options[1][0].toLowerCase() !== 'x'){
-    //     msg.reply(`The command structure is !roll D# X#. ${commandObject.options[0][0]} is not accepted for the times flag`);
-    //     return;
-    // }
-
-    // const sides = parseInt(commandObject.options[0].slice(1));
-    // const times = parseInt(commandObject.options[1].slice(1));
     let content = null;
-    const index = commandObject.options[0].findIndex(char => char.toLowerCase() === 'd');
-    const sides = commandObject.options.slice(0, index);
-    const times = commandObject.options.slice(index + 1)
-    if( index < 0 || !isNaN(parseInt(sides)) || !isNaN(parseInt(times))){
+    const optionsLength = commandObject.options.length;
+    const [times, sides] = commandObject.options[0].toLowerCase().split('d');
+
+    if (optionsLength > 1 || isNaN(parseInt(sides)) || isNaN(parseInt(times))) {
         content = [
             {
                 name: "Error",
                 value: "The Command Structure is invalid. Please ensure your command matches !roll #D#"
             }
         ]
+    } else {
+        const rollResult = rollTheDice(sides, times);
+
+        content = [
+            {
+                name: "Sides",
+                value: `${sides}`
+            },
+            {
+                name: "Times",
+                value: `${times}`
+            },
+            {
+                name: "Rolls",
+                value: `${rollResult}`
+            },
+            {
+                name: "Total",
+                value: `${_.sum(rollResult)}`
+            }
+        ]
     }
 
-
-    const rollResult = rollTheDice(sides, times)
-    const res = {embed: {
-        color: 3447003,
-        author: {
-          name: client.user.username,
-          icon_url: client.user.avatarURL
-        },
-        title: "DND Dice Roller",
-        description: "Command Structure !roll D# X#",
-        fields: [{
-            name: "Sides",
-            value: `${sides}`
-          },
-          {
-            name: "Times",
-            value: `${times}`
-          },
-          {
-            name: "Rolls",
-            value: `${rollResult}`
-          },
-          {
-              name: "Total",
-              value: `${_.sum(rollResult)}`
-          }
-        ]
-      }
+    const res = {
+        embed: {
+            color: 3447003,
+            author: {
+                name: client.user.username,
+                icon_url: client.user.avatarURL
+            },
+            title: "DND Dice Roller",
+            fields: content
+        }
     }
 
     msg.reply(res)
+}
+
+export const handleDB = (msg, commandObject) => {
+    // cases 
+    // create a dile
+    // read a file
+    // update a file
+    // delete a file
+
+
+    // use for storing messages later
+    // const guild = client.guilds.cache.get(`${msg.guild.id}`);
+    // console.log(`guild: ${guild}`)
+
+    // const member = guild.member(`${msg.author.id}`);
+    // console.log(`member: ${member.displayName}`)
+    // console.log(`message.author: ${msg.author.username}`); => false_owl
+    // console.log(`message.author: ${msg.author.nickname}`); 
+    // const member = guild.member(msg.authorID);
+    // const nickname = member ? member.displayName : null;
 }
 
 const rollTheDice = (sides, times) => {
@@ -127,27 +127,11 @@ const rollTheDice = (sides, times) => {
     return resultArray;
 }
 
-const getRollParametersFromOptions = (option) => {
-
-    
-}
-
-
-// use for storing messages later
-// const guild = client.guilds.cache.get(`${msg.guild.id}`);
-// console.log(`guild: ${guild}`)
-
-// const member = guild.member(`${msg.author.id}`);
-// console.log(`member: ${member.displayName}`)
-// console.log(`message.author: ${msg.author.username}`); => false_owl
-// console.log(`message.author: ${msg.author.nickname}`); 
-// const member = guild.member(msg.authorID);
-// const nickname = member ? member.displayName : null;
 
 const compareTimeStamps = (date1, date2) => {
-    console.log({date1})
+    console.log({ date1 })
     console.log(`Type of date 1: ${typeof date1}`)
-    console.log({date2})
+    console.log({ date2 })
     console.log(`Type of date 2: ${typeof date2}`)
 
     return date1 - date2;

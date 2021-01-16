@@ -1,7 +1,5 @@
 import { Message } from "discord.js";
-import { Command, handlePing, handleRoll } from "./commands";
-
-
+import { Command, handleDB, handlePing, handleRoll } from "./commands";
 
 
 const prefix = "!";
@@ -19,11 +17,15 @@ export const handleOnMessage = (message) => {
     console.log(`Command Object: ${JSON.stringify(commandObject)}`);
 
     if (commandObject.command === Command.PING){
-        handlePing(message, commandObject)
+        handlePing(message)
     }
 
     if (commandObject.command === Command.ROLL){
         handleRoll(message, commandObject)
+    }
+
+    if (commandObject.command === Command.DB){
+        handleDB(message, commandObject);
     }
 }
 
