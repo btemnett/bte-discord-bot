@@ -5,6 +5,8 @@ import {
     handleRoll,
     handleWhoAmI,
 } from "./commands";
+import { client } from './index';
+import * as cron from 'cron';
 
 
 const prefix = "!";
@@ -69,4 +71,21 @@ export const getCommandObjectFromMessage = (msg: Message): CommandObject => {
         command,
         options
     }
+}
+
+export const handleOnReady = () => {
+
+    client.user.setActivity("Good and Slookered");
+    const slookyChannelId = client.channels.cache.find(c => c.name === "slooky-time").id;
+    client.channels.cache.get(slookyChannelId).send("I am too Slooky for this...");
+
+    let scheduledMessage = new cron.CronJob('00 00 08 * * *', () => {
+        // This runs every day at 10:30:00, you can do anything you want
+        const today = new Date().toDateString()
+        client.channels.cache.get(slookyChannelId).send(`Today is ${today.toString()}`);
+    });
+
+    // When you want to start it, use:
+    scheduledMessage.start()
+    // You could also make a command to pause and resume the job
 }

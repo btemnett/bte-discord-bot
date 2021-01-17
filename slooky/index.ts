@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
 import { config } from './config';
-import { handleOnMessage } from './events';
+import { handleOnMessage, handleOnReady } from './events';
 
 export let client
 if (process.env.NODE_ENV === "production") {
@@ -11,6 +11,8 @@ if (process.env.NODE_ENV === "production") {
 
 try {
     client.on("message", handleOnMessage);
+    client.on("ready", handleOnReady);
+    
     client.login(config.BOT_TOKEN);
 } catch(e){
     console.error(`Error: ${e}`);
