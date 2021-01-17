@@ -4,7 +4,7 @@ import { client } from './index';
 
 let pings = []
 
-export const enum Command {
+export enum Command {
     PING = "ping",
     ROLL = "roll",
     DB = "db"

@@ -2,8 +2,12 @@ import Discord from 'discord.js';
 import { config } from './config';
 import { handleOnMessage } from './events';
 
-
-export const client = new Discord.Client();
+export let client
+if (process.env.NODE_env === "production") {
+    client = new Discord.Client();
+} else {
+    client = { on: () => {}, login: () => {} }
+}
 
 try {
 
