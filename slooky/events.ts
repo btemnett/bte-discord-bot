@@ -1,4 +1,3 @@
-import { Message } from "discord.js";
 import { Command, handleDB, handlePing, handleRoll } from "./commands";
 
 
