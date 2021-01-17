@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 import { client } from './index';
+import { CommandObject } from "./events"
+import { forEach } from 'lodash';
 
 
 let pings = []
@@ -7,7 +9,8 @@ let pings = []
 export enum Command {
     PING = "ping",
     ROLL = "roll",
-    DB = "db"
+    DB = "db",
+    WHOAMI = "whoami"
 }
 
 export const handlePing = (msg) => {
@@ -136,3 +139,33 @@ const compareTimeStamps = (date1, date2) => {
 
     return date1 - date2;
 }
+
+export const handleWhoAmI = (msg, commandObject: CommandObject): void => {
+    const flagsMap = mapFlagsToValues(commandObject)
+
+    if (flagsMap['list']) {
+        msg.reply(`list here eventually`)
+        return
+    }
+    
+    msg.reply(`You are: ${msg.author.nickname}`)
+}
+
+export const mapFlagsToValues = (commandObject: CommandObject) => {
+    const dict = {}
+    let currentKey = null
+
+    _.forEach(commandObject.options, option => {
+        if ( _.startsWith(option, ("--" || "-"))) {
+            const trimmedOption = removeDash(option)
+            dict[trimmedOption] = []
+            currentKey = trimmedOption
+        } else {
+            dict[currentKey].push(option)
+        }
+    })
+
+    return dict
+}
+
+const removeDash = (str) => !_.startsWith(str, "-") ? str : removeDash(str.slice(1))
