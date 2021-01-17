@@ -10,12 +10,9 @@ if (process.env.NODE_ENV === "production") {
 }
 
 try {
-
     client.on("message", handleOnMessage);
     client.login(config.BOT_TOKEN);
-
 } catch(e){
-    
-    console.log(`Error: ${e}`);
+    console.error(`Error: ${e}`);
 }
 
