@@ -3,7 +3,7 @@ import { config } from './config';
 import { handleOnMessage } from './events';
 
 export let client
-if (process.env.NODE_env === "production") {
+if (process.env.NODE_ENV === "production") {
     client = new Discord.Client();
 } else {
     client = { on: () => {}, login: () => {} }
