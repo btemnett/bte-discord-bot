@@ -147,8 +147,12 @@ export const handleWhoAmI = (msg, commandObject: CommandObject): void => {
         msg.reply(`list here eventually`)
         return
     }
-    
-    msg.reply(`You are: ${msg.author.nickname}`)
+
+    const guild = client.guilds.cache.get(`${msg.guild.id}`);
+    const member = guild.member(msg.author.id);
+    const nickname = member ? member.displayName : null;
+
+    msg.reply(`You are: ${nickname}`)
 }
 
 export const mapFlagsToValues = (commandObject: CommandObject) => {
@@ -156,7 +160,7 @@ export const mapFlagsToValues = (commandObject: CommandObject) => {
     let currentKey = null
 
     _.forEach(commandObject.options, option => {
-        if ( _.startsWith(option, ("--" || "-"))) {
+        if (_.startsWith(option, ("--" || "-"))) {
             const trimmedOption = removeDash(option)
             dict[trimmedOption] = []
             currentKey = trimmedOption
