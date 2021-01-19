@@ -23,26 +23,32 @@ if (process.env.NODE_ENV === "production") {
 try {
     awsClient.getSecretValue({ SecretId: secretName }, function (err, data) {
         if (err) {
-            if (err.code === 'DecryptionFailureException')
+            if (err.code === 'DecryptionFailureException') {
                 // Secrets Manager can't decrypt the protected secret text using the provided KMS key.
                 // Deal with the exception here, and/or rethrow at your discretion.
+                console.log(`Err: ${JSON.stringify(err)}`);
                 throw err;
-            else if (err.code === 'InternalServiceErrorException')
+            } else if (err.code === 'InternalServiceErrorException') {
                 // An error occurred on the server side.
                 // Deal with the exception here, and/or rethrow at your discretion.
+                console.log(`Err: ${JSON.stringify(err)}`);
                 throw err;
-            else if (err.code === 'InvalidParameterException')
+            } else if (err.code === 'InvalidParameterException') {
                 // You provided an invalid value for a parameter.
                 // Deal with the exception here, and/or rethrow at your discretion.
+                console.log(`Err: ${JSON.stringify(err)}`);
                 throw err;
-            else if (err.code === 'InvalidRequestException')
+            } else if (err.code === 'InvalidRequestException') {
                 // You provided a parameter value that is not valid for the current state of the resource.
                 // Deal with the exception here, and/or rethrow at your discretion.
                 throw err;
-            else if (err.code === 'ResourceNotFoundException')
+            } else if (err.code === 'ResourceNotFoundException') {
                 // We can't find the resource that you asked for.
                 // Deal with the exception here, and/or rethrow at your discretion.
+                console.log(`Err: ${JSON.stringify(err)}`);
                 throw err;
+            }
+            console.log(`Err: ${JSON.stringify(err)}`);
         }
         else {
             // console.log(`Secret data: ${JSON.stringify(data)}`);
