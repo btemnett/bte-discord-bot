@@ -3,10 +3,13 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 14fit 
   build:
     commands:
       - pwd
+      - cd slooky/
+      - npm run build
+      - npm run start
 artifacts:
   files:
   - './dist/*'
