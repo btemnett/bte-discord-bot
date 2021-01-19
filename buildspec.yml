@@ -8,6 +8,7 @@ phases:
     commands:
       - pwd
       - cd slooky/
+      - npm run i
       - npm run build
       - npm run start
 artifacts:
