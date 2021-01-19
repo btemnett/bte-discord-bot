@@ -57,6 +57,7 @@ try {
             if ('SecretString' in data) {
                 secret = data.SecretString;
             } else {
+                
                 console.log("second case")
                 // let buff = Buffer.from(data.SecretBinary, 'base64');
                 // decodedBinarySecret = buff.toString('ascii');
