@@ -1,2 +1,2 @@
 tsc -p .
-pm2 start cross-env NODE_ENV=production ./dist/index.js
+cross-env NODE_ENV=production pm2 start ./dist/index.js
