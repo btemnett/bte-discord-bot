@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/nodejs
+hooks:
+  BeforeInstall:
+    - location: scripts/before_installation.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/application_start.sh
+    - location: scripts/create_test_db.sh
+      timeout: 300
+      runas: root
