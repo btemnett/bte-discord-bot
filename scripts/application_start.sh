@@ -1,6 +1,5 @@
 #!/bin/bash
-cd /home/ubuntu/nodejs
-pwd
+cd /home/ubuntu/nodejs/slooky
 ls
-tsc -p .
+npm run build
 cross-env NODE_ENV=production pm2 start ./dist/index.js
