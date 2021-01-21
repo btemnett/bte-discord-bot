@@ -1,4 +1,5 @@
+#!/bin/bash
 mkdir /home/ubuntu/nodejs
-cd /home/ubuntu/nodejs/slooky
+cd /home/ubuntu/nodejs
 
 sudo npm install
