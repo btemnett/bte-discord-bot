@@ -18,9 +18,7 @@ export const handlePing = (msg) => {
     const user = client.users.cache.get(`${msg.author.id}`);
     console.log(`author: ${user}`)
 
-    const timeTaken = compareTimeStamps(Date.now(), msg.createdTimestamp);
-    console.log({ timeTaken })
-    console.log(`time taken type ${typeof timeTaken}`)
+    const timeTaken = Date.now() -msg.createdTimestamp
 
     const foundPingEventIndex = pings.findIndex(p => p.pinger === user);
 
@@ -130,17 +128,7 @@ const rollTheDice = (sides, times) => {
     return resultArray;
 }
 
-
-const compareTimeStamps = (date1, date2) => {
-    console.log({ date1 })
-    console.log(`Type of date 1: ${typeof date1}`)
-    console.log({ date2 })
-    console.log(`Type of date 2: ${typeof date2}`)
-
-    return date1 - date2;
-}
-
-export const handleWhoAmI = (msg, commandObject: CommandObject): void => {
+export const handleWhoAmI = (msg, commandObject: CommandObject) => {
     const flagsMap = mapFlagsToValues(commandObject)
 
     if (flagsMap['list']) {
@@ -149,10 +137,51 @@ export const handleWhoAmI = (msg, commandObject: CommandObject): void => {
     }
 
     const guild = client.guilds.cache.get(`${msg.guild.id}`);
-    const member = guild.member(msg.author.id);
-    const nickname = member ? member.displayName : null;
+    // const member = guild.member(msg.author.id);
+    // const nickname = member ? member.displayName : null;
+    const members = guild.members.fetch();
+    console.log(`Members: ${JSON.stringify(members)}`);
+    const userContentArray = members.reduce((acc, curr) => {
+        console.log(`User: ${curr.user.id}`);
+        const userFields = [
+            {
+                name: "User Name",
+                value: client.users.cache.get(curr.user.id),
+                inline: false
+            },
+            {
+                name: "Name",
+                value: "Test Name",
+                inline: true
+            },
+            {
+                name: "Nick Name",
+                value: curr.nickname,
+                inline: true
+            },
+            {
+                name: "Pronouns",
+                value: "Test They/Them",
+                inline: true
+            }
+        ]
+        return acc.concat(userFields)
+    },[])
+    const redsUser = members.find(m => m.user.id.toString().includes('efrondeur'));
+    const red = client.users.cache.get(redsUser.user.id)
 
-    msg.reply(`You are: ${nickname}`)
+    const res = buildRes(userContentArray, red);
+
+    msg.reply(res);
+}
+
+const buildRes = (userContentArray, red) => {
+    return `\`\`\`
+    markdown
+    # Slookers
+    ### Hey all. I want everyone to just take a minute to thank ${red} for all the work she has done to maintain this list. This list would not be around without her.
+    \`\`\`
+    `;
 }
 
 export const mapFlagsToValues = (commandObject: CommandObject) => {
