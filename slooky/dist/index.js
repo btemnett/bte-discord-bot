@@ -8,7 +8,7 @@ const discord_js_1 = __importDefault(require("discord.js"));
 const events_1 = require("./events");
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const region = 'us-west-1';
-const secretName = "prod-bot-token";
+const secretName = "bot-token";
 let secret;
 let decodedBinarySecret;
 // Create a Secrets Manager client

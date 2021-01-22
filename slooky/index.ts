@@ -4,7 +4,7 @@ import AWS from 'aws-sdk';
 
 
 const region = 'us-west-1';
-const secretName = "prod-bot-token";
+const secretName = "bot-token";
 let secret;
 let decodedBinarySecret;
 
